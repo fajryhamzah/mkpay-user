@@ -1,0 +1,21 @@
+version: '3'
+services:
+  mkpay-db:
+    image: "postgres"
+    container_name: mkpay-db
+    env_file:
+      - database.env
+    volumes:
+      - mkpay-user:/var/lib/postgresql/data
+      - ./schema/:/usr/share/db-schema
+  mkpay-db-testing:
+    image: "postgres"
+    container_name: mkpay-db-testing
+    env_file:
+      - database_testing.env
+    volumes:
+      - mkpay-user-testing:/var/lib/postgresql/data
+      - ./schema/:/usr/share/db-schema
+volumes: 
+  mkpay-user:
+  mkpay-user-testing:
