@@ -1,5 +1,9 @@
 version: '3'
 services:
+  redis:
+    image: redis:5.0.5-alpine
+    volumes:
+      - redis:/data
   mkpay-db:
     image: "postgres"
     container_name: mkpay-db
@@ -17,5 +21,6 @@ services:
       - mkpay-user-testing:/var/lib/postgresql/data
       - ./schema/:/usr/share/db-schema
 volumes: 
+  redis:
   mkpay-user:
   mkpay-user-testing:
