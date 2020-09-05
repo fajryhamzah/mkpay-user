@@ -19,6 +19,6 @@ func (p Driver) GetConnection() *sql.DB {
 	}
 
 	defer db.Close()
-	fmt.Print("Opening postgresql connection")
+	fmt.Println("Opening postgresql connection.....")
 	return db
 }
