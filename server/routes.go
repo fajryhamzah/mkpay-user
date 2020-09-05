@@ -3,12 +3,21 @@ package server
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
-func getRoute() {
-	http.HandleFunc("/", HelloServer)
+func (s Server) getRoute() *httprouter.Router {
+	controller := s.controller
+	router := httprouter.New()
+
+	router.GET("/:name", HelloServer)
+	router.POST("/auth", controller.Auth)
+
+	return router
 }
 
-func HelloServer(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+//HelloServer dummy homepage
+func HelloServer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	fmt.Fprintf(w, "Hello, %s!", ps.ByName("name"))
 }
