@@ -1,0 +1,69 @@
+#!/bin/bash
+
+migrate_up () {
+    if ! [ -f database.env ]; then
+        echo "ENV not found"
+        exit 1
+    fi
+
+    dbuser=$(grep POSTGRES_USER database.env | cut -d '=' -f2)
+    dbname=$(grep POSTGRES_DB database.env | cut -d '=' -f2)
+
+    docker exec -it mkpay-db psql -d $dbname -U $dbuser -f /usr/share/db-schema/schema.sql
+}
+
+migrate_down () {
+    if ! [ -f database.env ]; then
+        echo "ENV not found"
+        exit 1
+    fi
+
+    dbuser=$(grep POSTGRES_USER database.env | cut -d '=' -f2)
+    dbname=$(grep POSTGRES_DB database.env | cut -d '=' -f2)
+
+    docker exec -it mkpay-db psql -d $dbname -U $dbuser -f /usr/share/db-schema/drop.sql
+}
+
+migrate_testing_up () {
+    if ! [ -f database_testing.env ]; then
+        echo "ENV not found"
+        exit 1
+    fi
+
+    dbuser=$(grep POSTGRES_USER database_testing.env | cut -d '=' -f2)
+    dbname=$(grep POSTGRES_DB database_testing.env | cut -d '=' -f2)
+
+    docker exec -it mkpay-db-testing psql -d $dbname -U $dbuser -f /usr/share/db-schema/schema.sql
+}
+
+migrate_testing_down () {
+    if ! [ -f database_testing.env ]; then
+        echo "ENV not found"
+        exit 1
+    fi
+
+    dbuser=$(grep POSTGRES_USER database_testing.env | cut -d '=' -f2)
+    dbname=$(grep POSTGRES_DB database_testing.env | cut -d '=' -f2)
+
+    docker exec -it mkpay-db-testing psql -d $dbname -U $dbuser -f /usr/share/db-schema/drop.sql
+}
+
+if [ "$1" == "migrate" ]; then
+    if [ "$2" == "test" ]; then
+        if [ "$3" == "down" ]; then
+            migrate_testing_down
+        else
+            migrate_testing_up
+        fi
+    else
+        if [ "$2" == "down" ]; then
+            migrate_down
+        else
+            migrate_up
+        fi
+    fi
+elif [ "$1" == "up" ]; then
+    docker-compose up -d 
+elif [ "$1" == "down" ]; then
+    docker-compose down
+fi
