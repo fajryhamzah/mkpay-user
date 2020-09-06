@@ -11,7 +11,7 @@ func get(driver string, connectionString string) DbInterface {
 
 	switch driver {
 	case PSQL:
-		db = psql.Driver{connectionString}
+		db = psql.Driver{Connection: connectionString}
 	default:
 		panic("Driver not supported")
 	}
@@ -19,6 +19,12 @@ func get(driver string, connectionString string) DbInterface {
 	return db
 }
 
+//GetInstance instance of real database
 func GetInstance() DbInterface {
 	return get(os.Getenv("DB_DRIVER"), os.Getenv("DB_CONNECTION_STRING"))
+}
+
+//GetTestInstance instance of testing database
+func GetTestInstance() DbInterface {
+	return get(os.Getenv("DB_DRIVER"), os.Getenv("DB_TEST_CONNECTION_STRING"))
 }

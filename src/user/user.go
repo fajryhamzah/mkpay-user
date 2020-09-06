@@ -1,13 +1,19 @@
 package user
 
+import (
+	"database/sql"
+	"time"
+)
+
 //User model
 type User struct {
-	ID       uint32
-	Email    string
-	UserType string
-	Active   bool
-	Code     string
-	password string
+	ID        uint32
+	Email     string
+	UserType  string
+	Active    bool
+	Code      string
+	password  string
+	deletedAt *time.Time
 }
 
 //GetID id getter
@@ -43,4 +49,13 @@ func (u User) GetUserType() string {
 //SetPassword password setter
 func (u *User) SetPassword(password string) {
 	u.password = password
+}
+
+//New initialize all params from query result
+func (u *User) New(row *sql.Row) {
+	err := row.Scan(&u.ID, &u.Code, &u.Email, &u.password, &u.UserType, &u.Active, &u.deletedAt)
+
+	if err != nil {
+		panic(err)
+	}
 }

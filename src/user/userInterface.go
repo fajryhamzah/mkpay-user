@@ -1,5 +1,7 @@
 package user
 
+import "database/sql"
+
 //TypeAdmin user type
 const TypeAdmin = "admin"
 
@@ -15,4 +17,5 @@ type ModelInterface interface {
 	GetActive() bool
 	GetCode() string
 	SetPassword(password string)
+	New(row *sql.Row)
 }
