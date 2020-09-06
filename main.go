@@ -26,4 +26,6 @@ func main() {
 	)
 
 	webserver.InitServer()
+
+	defer dbConnection.Close()
 }
