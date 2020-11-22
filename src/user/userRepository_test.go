@@ -55,3 +55,13 @@ func TestFindByCode(t *testing.T) {
 		t.Error("Wrong user code")
 	}
 }
+
+func TestFindByEmail(t *testing.T) {
+	prepareTestDatabase()
+	var dummyEmail = "dummy@email.com"
+	model := repo.FindByEmail(dummyEmail)
+
+	if model.GetEmail() != dummyEmail {
+		t.Error("Wrong user email")
+	}
+}

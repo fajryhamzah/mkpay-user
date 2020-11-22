@@ -2,9 +2,9 @@ package user
 
 //RepoInterface user repository interface
 type RepoInterface interface {
-	//	GetBy(where map[string]string) []ModelInterface
 	FindByCode(code string) ModelInterface
-	//	Save(user ModelInterface) bool
-	//	Update(id int, user ModelInterface) bool
-	//	Delete(id int) bool
+	FindByEmail(email string) ModelInterface
+	Save(user ModelInterface) error
+	Update(id uint32, user ModelInterface) error
+	Delete(id uint32) error
 }

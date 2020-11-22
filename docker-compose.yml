@@ -4,6 +4,8 @@ services:
     image: redis:5.0.5-alpine
     volumes:
       - redis:/data
+    ports:
+      - '6379:6379'
   mkpay-db:
     image: "postgres"
     container_name: mkpay-db
@@ -12,6 +14,8 @@ services:
     volumes:
       - mkpay-user:/var/lib/postgresql/data
       - ./schema/:/usr/share/db-schema
+    ports:
+      - '5433:5432'
   mkpay-db-testing:
     image: "postgres"
     container_name: mkpay-db-testing
@@ -20,6 +24,8 @@ services:
     volumes:
       - mkpay-user-testing:/var/lib/postgresql/data
       - ./schema/:/usr/share/db-schema
+    ports:
+      - '5434:5432'
 volumes: 
   redis:
   mkpay-user:

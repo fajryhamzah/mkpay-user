@@ -2,5 +2,6 @@
   code: e827435e-7a08-4711-8089-cf4f009694bc
   email: dummy@email.com
   password: $2a$04$blD/sqyJboRodMJqaSXJI.lbsVACOJ6q1H8Hq77OBmlJIUwvFGzmu
+  phone_number: "089653918080"
   user_type: admin
   active: true

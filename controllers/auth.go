@@ -1,16 +1,12 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
 
-//Auth handler
 func (m MainController) Auth(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
-
 	if err := r.ParseForm(); err != nil {
 		internalError(w)
 		return
@@ -23,7 +19,32 @@ func (m MainController) Auth(w http.ResponseWriter, r *http.Request, _ httproute
 		return
 	}
 
-	fmt.Fprintf(w, "LOGIN!")
+	result, err := m.authHandler.Auth(email, pass)
+
+	if err != nil {
+		notFoundResponse(w, []string{err.Error()})
+		return
+	}
+
+	successResponse(w, result)
+}
+
+func (m MainController) TokenByRefreshToken(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	if err := r.ParseForm(); err != nil {
+		internalError(w)
+		return
+	}
+
+	refreshToken := r.PostFormValue("refresh_token")
+
+	result, err := m.authHandler.GetNewTokenWithRefreshToken(refreshToken)
+
+	if err != nil {
+		requestNotValid(w, []string{err.Error()})
+		return
+	}
+
+	successResponse(w, result)
 }
 
 func authRequestValidator(w http.ResponseWriter, email string, pass string) bool {
